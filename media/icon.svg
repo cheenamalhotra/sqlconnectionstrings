@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Background -->
+  <circle cx="64" cy="64" r="62" fill="#1e3a5f"/>
+  
+  <!-- Friendly robot mascot body -->
+  <g transform="translate(64, 68)">
+    <!-- Robot body - rounded rectangle -->
+    <rect x="-28" y="-8" width="56" height="48" rx="8" fill="#4ec9b0"/>
+    <rect x="-24" y="-4" width="48" height="40" rx="6" fill="#3ba896"/>
+    
+    <!-- Body screen with connection string -->
+    <rect x="-20" y="2" width="40" height="28" rx="3" fill="#1e1e1e"/>
+    <text x="-16" y="14" font-family="monospace" font-size="6" fill="#9cdcfe">Srv=</text>
+    <text x="2" y="14" font-family="monospace" font-size="6" fill="#ce9178">...</text>
+    <text x="-16" y="22" font-family="monospace" font-size="6" fill="#9cdcfe">DB=</text>
+    <text x="-2" y="22" font-family="monospace" font-size="6" fill="#ce9178">...</text>
+    
+    <!-- Antenna -->
+    <line x1="0" y1="-8" x2="0" y2="-20" stroke="#4ec9b0" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="0" cy="-24" r="5" fill="#ffd700"/>
+    <circle cx="0" cy="-24" r="3" fill="#ffed4a"/>
+  </g>
+  
+  <!-- Robot head -->
+  <g transform="translate(64, 38)">
+    <!-- Head shape -->
+    <rect x="-24" y="-20" width="48" height="36" rx="10" fill="#4ec9b0"/>
+    <rect x="-20" y="-16" width="40" height="28" rx="8" fill="#3ba896"/>
+    
+    <!-- Eyes - friendly and glowing -->
+    <ellipse cx="-10" cy="-4" rx="8" ry="9" fill="#1e1e1e"/>
+    <ellipse cx="10" cy="-4" rx="8" ry="9" fill="#1e1e1e"/>
+    <circle cx="-10" cy="-4" r="5" fill="#569cd6"/>
+    <circle cx="10" cy="-4" r="5" fill="#569cd6"/>
+    <circle cx="-8" cy="-6" r="2" fill="#ffffff"/>
+    <circle cx="12" cy="-6" r="2" fill="#ffffff"/>
+    
+    <!-- Happy smile -->
+    <path d="M -12 8 Q 0 16 12 8" fill="none" stroke="#1e1e1e" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- Ears/side panels -->
+    <rect x="-30" y="-10" width="8" height="16" rx="3" fill="#4ec9b0"/>
+    <rect x="22" y="-10" width="8" height="16" rx="3" fill="#4ec9b0"/>
+  </g>
+  
+  <!-- Translation arrows around robot -->
+  <g transform="translate(64, 64)">
+    <!-- Left arrow (incoming) -->
+    <path d="M -48 -5 L -38 -5 L -38 -10 L -28 0 L -38 10 L -38 5 L -48 5 Z" fill="#dcdcaa"/>
+    
+    <!-- Right arrow (outgoing) -->
+    <path d="M 48 -5 L 38 -5 L 38 -10 L 28 0 L 38 10 L 38 5 L 48 5 Z" fill="#c586c0"/>
+  </g>
+  
+  <!-- Small driver symbols at bottom -->
+  <g transform="translate(64, 115)">
+    <text x="-35" y="0" font-family="monospace" font-size="7" fill="#569cd6" font-weight="bold">.NET</text>
+    <text x="-8" y="0" font-family="monospace" font-size="7" fill="#dcdcaa" font-weight="bold">JDBC</text>
+    <text x="18" y="0" font-family="monospace" font-size="7" fill="#6a9955" font-weight="bold">PY</text>
+  </g>
+</svg>

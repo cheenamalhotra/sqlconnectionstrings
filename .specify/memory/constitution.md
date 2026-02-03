@@ -1,50 +1,168 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+================================================================================
+SYNC IMPACT REPORT
+================================================================================
+Version change: N/A → 1.0.0 (initial ratification)
+Modified principles: N/A (initial creation)
+Added sections:
+  - Core Principles (7 principles)
+  - Code Ethics
+  - Quality Gates & Development Workflow
+  - Governance
+Removed sections: None
+Templates requiring updates:
+  - .specify/templates/plan-template.md ✅ (Constitution Check section compatible)
+  - .specify/templates/spec-template.md ✅ (User scenarios align with test-first)
+  - .specify/templates/tasks-template.md ✅ (Test tasks structure compatible)
+Follow-up TODOs: None
+================================================================================
+-->
+
+# SQL Connection Strings Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Test-First Mindset (NON-NEGOTIABLE)
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+All development MUST follow Test-Driven Development (TDD) methodology:
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+- Tests MUST be written before implementation code
+- Red-Green-Refactor cycle is strictly enforced:
+  1. **Red**: Write a failing test that defines expected behavior
+  2. **Green**: Write the minimum code to make the test pass
+  3. **Refactor**: Improve code quality while keeping tests green
+- No production code may be merged without corresponding tests
+- Test intent MUST be reviewed and approved before implementation begins
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+**Rationale**: TDD ensures code correctness from the start, reduces debugging time, and creates living documentation of expected behavior.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### II. 100% Code Coverage (NON-NEGOTIABLE)
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+Every line of production code MUST be covered by automated tests:
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+- Unit test coverage MUST reach 100% for all new code
+- Coverage reports MUST be generated and reviewed on every PR
+- Untested code paths are considered defects and MUST be addressed before merge
+- Coverage includes: statements, branches, functions, and lines
+- Exception: Generated code, third-party integrations, and platform-specific boilerplate may be excluded with documented justification
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+**Rationale**: Complete coverage ensures no hidden bugs lurk in untested paths and provides confidence for refactoring.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### III. Reliability
+
+All code MUST be designed for predictable, consistent behavior:
+
+- Functions MUST produce the same output for the same input (determinism)
+- Error handling MUST be explicit—no silent failures
+- All exceptions MUST be caught, logged, and handled gracefully
+- Retry logic with exponential backoff MUST be used for transient failures
+- Circuit breaker patterns SHOULD be used for external dependencies
+- Timeouts MUST be configured for all I/O operations
+
+**Rationale**: Reliable software builds user trust and reduces operational burden.
+
+### IV. Stability
+
+Code changes MUST NOT break existing functionality:
+
+- All public APIs MUST maintain backward compatibility within major versions
+- Breaking changes require MAJOR version bumps and migration guides
+- Deprecation warnings MUST precede removals by at least one minor version
+- Feature flags SHOULD be used to safely roll out changes
+- Rollback procedures MUST be documented for all deployments
+
+**Rationale**: Stability ensures dependent systems and users can rely on consistent behavior.
+
+### V. Reusability
+
+Code MUST be designed for maximum reuse:
+
+- Single Responsibility Principle: each module/class does ONE thing well
+- DRY (Don't Repeat Yourself): extract common logic into shared utilities
+- Libraries MUST be self-contained with clear interfaces
+- Dependencies MUST be explicitly declared and minimized
+- Configuration MUST be externalized (no hardcoded values)
+- Documentation MUST accompany all reusable components
+
+**Rationale**: Reusable code reduces duplication, speeds up development, and ensures consistency.
+
+### VI. Clean Code Standards
+
+All code MUST adhere to industry-standard clean code practices:
+
+- **Naming**: Use descriptive, intention-revealing names
+- **Functions**: Keep functions small (≤20 lines preferred), single-purpose
+- **Comments**: Code should be self-documenting; comments explain "why", not "what"
+- **Formatting**: Consistent style enforced by automated linters
+- **SOLID Principles**: Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion
+- **YAGNI**: Do not add functionality until it is needed
+- **KISS**: Keep implementations simple and straightforward
+
+**Rationale**: Clean code is readable, maintainable, and reduces cognitive load for all contributors.
+
+### VII. Security by Design
+
+Security MUST be integrated from the start, not bolted on:
+
+- Input validation MUST occur at all entry points
+- Secrets MUST never be hardcoded or logged
+- Connection strings and credentials MUST use secure storage (environment variables, vaults)
+- SQL injection prevention: use parameterized queries exclusively
+- Least privilege: grant minimum permissions required
+- Dependencies MUST be regularly scanned for vulnerabilities
+- Security tests MUST be part of the CI/CD pipeline
+
+**Rationale**: Security breaches are costly; prevention is far cheaper than remediation.
+
+## Code Ethics
+
+All contributors MUST adhere to these ethical standards:
+
+1. **Honesty**: Report bugs, limitations, and uncertainties transparently
+2. **Ownership**: Take responsibility for code quality and its consequences
+3. **Collaboration**: Share knowledge, review code constructively, and mentor others
+4. **Continuous Improvement**: Actively seek to learn and apply better practices
+5. **User Focus**: Consider the end-user impact of every technical decision
+6. **Sustainability**: Write code that future maintainers can understand and extend
+7. **Integrity**: Never introduce intentional vulnerabilities, backdoors, or malicious code
+
+## Quality Gates & Development Workflow
+
+### Pre-Commit Requirements
+
+- [ ] All tests pass locally
+- [ ] Code coverage meets or exceeds 100%
+- [ ] Linting and formatting checks pass
+- [ ] No compiler/interpreter warnings
+- [ ] Self-review completed
+
+### Pull Request Requirements
+
+- [ ] Linked to an issue or specification
+- [ ] All CI checks pass (tests, coverage, linting, security scans)
+- [ ] At least one peer review approval
+- [ ] Documentation updated if applicable
+- [ ] Breaking changes flagged and discussed
+
+### Merge Requirements
+
+- [ ] All PR requirements satisfied
+- [ ] No unresolved review comments
+- [ ] Branch is up-to-date with main/target branch
+- [ ] Squash commits with meaningful message
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This Constitution supersedes all other development practices and guidelines:
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+- All Pull Requests MUST verify compliance with these principles
+- Deviations require explicit documentation and approval from maintainers
+- Complexity beyond these guidelines MUST be justified in writing
+- Constitution amendments require:
+  1. Written proposal with rationale
+  2. Review period of at least 3 business days
+  3. Approval from project maintainers
+  4. Migration plan for existing code (if applicable)
+  5. Version bump according to semantic versioning
+
+**Version**: 1.0.0 | **Ratified**: 2026-01-29 | **Last Amended**: 2026-01-29

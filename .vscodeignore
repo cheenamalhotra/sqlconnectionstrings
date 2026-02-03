@@ -1,0 +1,37 @@
+# VS Code development files
+.vscode/**
+.vscode-test/**
+
+# Source files (compiled output is in dist/)
+src/**
+test/**
+
+# Build/config files
+.gitignore
+.eslintrc.json
+.prettierrc
+jest.config.js
+tsconfig.json
+webpack.config.js
+
+# Source maps
+*.map
+
+# Dependencies (bundled via webpack)
+node_modules/**
+
+# Specification files
+.specify/**
+specs/**
+
+# Coverage reports
+coverage/**
+
+# Development files
+*.log
+.DS_Store
+Thumbs.db
+
+# Git files
+.git/**
+.github/**
