@@ -224,6 +224,20 @@ The mssql-python driver uses a **restricted allowlist** (`_ALLOWED_CONNECTION_ST
 
 ---
 
+## OLEDB-Specific Features (Provider Keyword Required)
+
+| Category | Keyword | Description |
+|----------|---------|-------------|
+| **Driver** | Provider ⚠️ **MANDATORY** | Must be first parameter in connection string |
+| **Connection** | Data Source | Maps to `Server` in other drivers |
+| **Connection** | Initial Catalog | Maps to `Database` in other drivers |
+| **Security** | Use Encryption for Data | Maps to `Encrypt` in other drivers |
+| **Security** | Trust Server Certificate | Space-separated variant |
+| **Features** | MARS Connection | Maps to `MultipleActiveResultSets` in SqlClient |
+| **Behavior** | Auto Translate | Automatic character set translation |
+
+---
+
 ## Rust-Specific Features (mssql-tds)
 
 | Field Path | Type | Notes |
@@ -321,28 +335,6 @@ The mssql-python driver uses a **restricted allowlist** (`_ALLOWED_CONNECTION_ST
 | IP Address Preference | `IPv4First` | `IPv4First` | `IPv4First` | `UsePlatformDefault` |
 
 ---
-
-## OLEDB-Specific Features (Provider Keyword Required)
-
-| Category | Keyword | Description |
-|----------|---------|-------------|
-| **Driver** | Provider ⚠️ **MANDATORY** | Must be first parameter in connection string |
-| **Connection** | Data Source | Maps to `Server` in other drivers |
-| **Connection** | Initial Catalog | Maps to `Database` in other drivers |
-| **Security** | Use Encryption for Data | Maps to `Encrypt` in other drivers |
-| **Security** | Trust Server Certificate | Space-separated variant |
-| **Features** | MARS Connection | Maps to `MultipleActiveResultSets` in SqlClient |
-| **Behavior** | Auto Translate | Automatic character set translation |
-
-### ⚠️ CRITICAL: Provider Keyword Requirement
-
-**Mandatory Format**: `Provider=<ProviderName>;[additional properties...]`
-
-**Common Providers**:
-- `MSOLEDBSQL` (✅ Recommended for SQL Server 2012+)
-- `SQLNCLI11` (⚠️ Deprecated, SQL Server 2012-2019)
-- `SQLOLEDB` (⚠️ Deprecated, legacy only)
-- `Microsoft.Jet.OLEDB.4.0` (Legacy, for Access databases)
 
 **Translation Rules**:
 - **TO OLEDB**: Translator MUST inject `Provider=MSOLEDBSQL;` as first parameter
