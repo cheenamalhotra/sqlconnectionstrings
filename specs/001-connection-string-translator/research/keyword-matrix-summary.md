@@ -1,7 +1,7 @@
 # SQL Server Connection String Keywords - Consolidated Matrix
 
 **Created**: 2026-01-29  
-**Last Updated**: 2026-01-29 (Source Code Review)  
+**Last Updated**: 2026-02-04 
 **Purpose**: Single comprehensive matrix of all connection string keywords across all 7 SQL Server drivers  
 **Reference**: See [driver-keyword-mapping.md](driver-keyword-mapping.md) for detailed descriptions
 
@@ -71,7 +71,7 @@
 | **54** | **Pooling** | Pool Blocking Period | `Pool Blocking Period` | N/A | N/A | N/A | N/A | N/A | N/A |
 | **55** | **Resiliency** | Connect Retry Count | `Connect Retry Count` | `ConnectRetryCount` | `Connect Retry Count` | `connectRetryCount` | `ConnectRetryCount` | `ConnectRetryCount` | `connect_retry_count` |
 | **56** | **Resiliency** | Connect Retry Interval | `Connect Retry Interval` | `ConnectRetryInterval` | `Connect Retry Interval` | `connectRetryInterval` | `ConnectRetryInterval` | `ConnectRetryInterval` | N/A |
-| **57** | **Driver** | Driver | N/A | `Driver` | `Provider` | N/A | `Driver` | `Driver` | N/A |
+| **57** | **Driver** | Driver/Provider | N/A | `Driver` | `Provider`⁽ᴹᴬᴺᴰᴬᵀᴼᴿʸ⁾ | N/A | `Driver` | `Driver` | N/A |
 | **58** | **Driver** | Type System Version | `Type System Version` | N/A | N/A | N/A | N/A | N/A | N/A |
 | **59** | **Driver** | Transaction Binding | `Transaction Binding` | N/A | N/A | N/A | N/A | N/A | N/A |
 | **60** | **Driver** | Context Connection | `Context Connection` | N/A | N/A | N/A | N/A | N/A | N/A |
@@ -163,6 +163,7 @@
 | ⁹ | App Name | `Application Name`, `App`, `APP` |
 | ¹⁰ | MARS (OLEDB) | `MARS Connection`, `MarsConn` |
 | ¹¹ | Load Balance Timeout | `Load Balance Timeout`, `Connection Lifetime` |
+| ⁽ᴹᴬᴺᴰᴬᵀᴼᴿʸ⁾ | **OLEDB Provider** | **REQUIRED**: Must be first parameter. Default: `MSOLEDBSQL` for SQL Server |
 
 ---
 
@@ -172,7 +173,7 @@
 |--------|---------------|-------------|-------|
 | **SqlClient** | 44 | dotnet/SqlClient | Most comprehensive, .NET native, 34 synonyms |
 | **ODBC** | 58 | microsoft/msodbc | Cross-platform, 3 synonyms, 7 deprecated |
-| **OLEDB** | 38 | — | Windows-centric, COM-based |
+| **OLEDB** | 38 | — | ⚠️ Windows-centric, COM-based, **Provider keyword MANDATORY** |
 | **JDBC** | 65+ | microsoft/mssql-jdbc | Java ecosystem, camelCase, most feature-rich |
 | **PHP** | 35 | microsoft/msphpsql | SQLSRV + PDO_SQLSRV, ODBC-based |
 | **Python** | 22 | microsoft/mssql-python | Restricted allowlist, many ODBC keywords blocked |
@@ -321,4 +322,41 @@ The mssql-python driver uses a **restricted allowlist** (`_ALLOWED_CONNECTION_ST
 
 ---
 
-*Generated from driver source code via Bluebird MCP servers. Last updated: 2026-01-29*
+## OLEDB-Specific Features (Provider Keyword Required)
+
+| Category | Keyword | Description |
+|----------|---------|-------------|
+| **Driver** | Provider ⚠️ **MANDATORY** | Must be first parameter in connection string |
+| **Connection** | Data Source | Maps to `Server` in other drivers |
+| **Connection** | Initial Catalog | Maps to `Database` in other drivers |
+| **Security** | Use Encryption for Data | Maps to `Encrypt` in other drivers |
+| **Security** | Trust Server Certificate | Space-separated variant |
+| **Features** | MARS Connection | Maps to `MultipleActiveResultSets` in SqlClient |
+| **Behavior** | Auto Translate | Automatic character set translation |
+
+### ⚠️ CRITICAL: Provider Keyword Requirement
+
+**Mandatory Format**: `Provider=<ProviderName>;[additional properties...]`
+
+**Common Providers**:
+- `MSOLEDBSQL` (✅ Recommended for SQL Server 2012+)
+- `SQLNCLI11` (⚠️ Deprecated, SQL Server 2012-2019)
+- `SQLOLEDB` (⚠️ Deprecated, legacy only)
+- `Microsoft.Jet.OLEDB.4.0` (Legacy, for Access databases)
+
+**Translation Rules**:
+- **TO OLEDB**: Translator MUST inject `Provider=MSOLEDBSQL;` as first parameter
+- **FROM OLEDB**: Translator MUST remove Provider keyword
+- **Keyword Mapping**: `Data Source` ↔ `Server`, `Initial Catalog` ↔ `Database`, `Use Encryption for Data` ↔ `Encrypt`, `MARS Connection` ↔ `MultipleActiveResultSets`
+- **Position**: Provider must always be first; connection strings without it are invalid
+
+**Valid Examples**:
+```
+✅ Provider=MSOLEDBSQL;Data Source=server;Initial Catalog=db;User ID=user;Password=pass;
+❌ Data Source=server;Provider=MSOLEDBSQL;... (Provider not first - INVALID)
+❌ Data Source=server;Initial Catalog=db;... (Missing Provider - INVALID)
+```
+
+---
+
+*Generated from driver source code via Bluebird MCP servers. Last updated: 2026-02-04*

@@ -255,254 +255,18 @@ export class TranslatorPanel {
 
   private _getHtmlContent(): string {
     const nonce = getNonce();
+    const styleUri = this._panel.webview.asWebviewUri(
+      vscode.Uri.joinPath(this._extensionUri, 'media', 'panel.css')
+    );
 
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'nonce-${nonce}';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${this._panel.webview.cspSource}; script-src 'nonce-${nonce}';">
     <title>Connection String Translator</title>
-    <style>
-        :root {
-            --vscode-font-family: var(--vscode-editor-font-family, 'Segoe UI', sans-serif);
-        }
-        body {
-            font-family: var(--vscode-font-family);
-            padding: 20px;
-            color: var(--vscode-foreground);
-            background-color: var(--vscode-editor-background);
-        }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        h1 {
-            color: var(--vscode-titleBar-activeForeground);
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
-        .section {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--vscode-foreground);
-        }
-        textarea {
-            width: 100%;
-            height: 100px;
-            padding: 10px;
-            border: 1px solid var(--vscode-input-border);
-            background-color: var(--vscode-input-background);
-            color: var(--vscode-input-foreground);
-            font-family: var(--vscode-editor-font-family, monospace);
-            font-size: 13px;
-            resize: vertical;
-            border-radius: 4px;
-        }
-        textarea:focus {
-            outline: 1px solid var(--vscode-focusBorder);
-        }
-        select {
-            padding: 8px 12px;
-            border: 1px solid var(--vscode-dropdown-border);
-            background-color: var(--vscode-dropdown-background);
-            color: var(--vscode-dropdown-foreground);
-            font-size: 13px;
-            border-radius: 4px;
-            min-width: 200px;
-        }
-        .driver-row {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 15px;
-        }
-        .driver-row > div {
-            flex: 1;
-        }
-        button {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 13px;
-            margin-right: 8px;
-            margin-top: 10px;
-        }
-        .btn-primary {
-            background-color: var(--vscode-button-background);
-            color: var(--vscode-button-foreground);
-        }
-        .btn-primary:hover {
-            background-color: var(--vscode-button-hoverBackground);
-        }
-        .btn-secondary {
-            background-color: var(--vscode-button-secondaryBackground);
-            color: var(--vscode-button-secondaryForeground);
-        }
-        .btn-secondary:hover {
-            background-color: var(--vscode-button-secondaryHoverBackground);
-        }
-        .output-section {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: var(--vscode-editor-inactiveSelectionBackground);
-            border-radius: 4px;
-        }
-        .output-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .output-header h3 {
-            margin: 0;
-            font-size: 16px;
-        }
-        .output-content {
-            background-color: var(--vscode-editor-background);
-            padding: 12px;
-            border-radius: 4px;
-            font-family: var(--vscode-editor-font-family, monospace);
-            font-size: 13px;
-            word-break: break-all;
-            white-space: pre-wrap;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        .output-content.rust-code {
-            white-space: pre;
-            word-break: normal;
-            overflow-x: auto;
-        }
-        .code-block-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: var(--vscode-editorGroupHeader-tabsBackground);
-            padding: 4px 12px;
-            border-radius: 4px 4px 0 0;
-            font-size: 12px;
-            color: var(--vscode-descriptionForeground);
-        }
-        .code-block-header + .output-content {
-            border-radius: 0 0 4px 4px;
-        }
-        /* Rust syntax highlighting */
-        .rust-keyword { color: var(--vscode-symbolIcon-keywordForeground, #569cd6); }
-        .rust-type { color: var(--vscode-symbolIcon-classForeground, #4ec9b0); }
-        .rust-string { color: var(--vscode-symbolIcon-stringForeground, #ce9178); }
-        .rust-field { color: var(--vscode-symbolIcon-fieldForeground, #9cdcfe); }
-        .rust-bool { color: var(--vscode-symbolIcon-booleanForeground, #569cd6); }
-        .rust-comment { color: var(--vscode-symbolIcon-commentForeground, #6a9955); }
-        .warnings {
-            margin-top: 15px;
-            padding: 10px;
-            background-color: var(--vscode-inputValidation-warningBackground);
-            border: 1px solid var(--vscode-inputValidation-warningBorder);
-            border-radius: 4px;
-        }
-        .warnings h4 {
-            margin: 0 0 8px 0;
-            color: var(--vscode-editorWarning-foreground);
-        }
-        .warnings ul {
-            margin: 0;
-            padding-left: 20px;
-        }
-        .errors {
-            margin-top: 15px;
-            padding: 10px;
-            background-color: var(--vscode-inputValidation-errorBackground);
-            border: 1px solid var(--vscode-inputValidation-errorBorder);
-            border-radius: 4px;
-        }
-        .errors h4 {
-            margin: 0 0 8px 0;
-            color: var(--vscode-editorError-foreground);
-        }
-        .untranslatable {
-            margin-top: 15px;
-            padding: 10px;
-            background-color: var(--vscode-inputValidation-infoBackground);
-            border: 1px solid var(--vscode-inputValidation-infoBorder);
-            border-radius: 4px;
-        }
-        .untranslatable h4 {
-            margin: 0 0 8px 0;
-            color: var(--vscode-editorInfo-foreground);
-        }
-        .detection-badge {
-            display: inline-block;
-            padding: 4px 8px;
-            font-size: 12px;
-            border-radius: 12px;
-            margin-left: 8px;
-        }
-        .detection-high {
-            background-color: var(--vscode-testing-iconPassed);
-            color: white;
-        }
-        .detection-medium {
-            background-color: var(--vscode-testing-iconQueued);
-            color: white;
-        }
-        .detection-low {
-            background-color: var(--vscode-testing-iconUnset);
-            color: white;
-        }
-        .all-formats {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        .format-card {
-            background-color: var(--vscode-editor-background);
-            border: 1px solid var(--vscode-panel-border);
-            border-radius: 4px;
-            padding: 12px;
-        }
-        .format-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-        .format-card-header h4 {
-            margin: 0;
-            text-transform: uppercase;
-            font-size: 12px;
-            color: var(--vscode-descriptionForeground);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .warning-icon {
-            cursor: help;
-            font-size: 14px;
-        }
-        .warning-icon[title] {
-            position: relative;
-        }
-        .format-card-content {
-            font-family: var(--vscode-editor-font-family, monospace);
-            font-size: 12px;
-            word-break: break-all;
-            max-height: 100px;
-            overflow-y: auto;
-        }
-        .copy-btn {
-            padding: 4px 8px;
-            font-size: 11px;
-        }
-        .hidden {
-            display: none;
-        }
-    </style>
+    <link rel="stylesheet" href="${styleUri}">
 </head>
 <body>
     <div class="container">
@@ -545,7 +309,6 @@ export class TranslatorPanel {
         <div class="section">
             <button id="translateBtn" class="btn-primary">Translate</button>
             <button id="translateAllBtn" class="btn-secondary">Translate to All Formats</button>
-            <button id="validateBtn" class="btn-secondary">Validate Only</button>
             <button id="clearBtn" class="btn-secondary">Clear</button>
         </div>
 
@@ -659,17 +422,6 @@ export class TranslatorPanel {
                 input: inputEl.value,
                 sourceDriver: sourceDriverEl.value || undefined,
             });
-        });
-
-        // Validate button
-        document.getElementById('validateBtn').addEventListener('click', () => {
-            console.log('[CST] Validate button clicked');
-            if (!inputEl.value.trim()) {
-                console.log('[CST] No input value, skipping');
-                return;
-            }
-            hideErrors();
-            logAndPost({ command: 'validate', input: inputEl.value });
         });
 
         // Clear button

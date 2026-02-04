@@ -44,6 +44,17 @@ function generateKeyValue(
   const parts: string[] = [];
   let prefix = '';
 
+  // For OLEDB, add the Provider specification FIRST if not already present
+  if (driver === 'oledb') {
+    const hasProvider = mapped.translatedKeywords.some(
+      (kw) => kw.targetKeyword.toLowerCase() === 'provider'
+    );
+    if (!hasProvider) {
+      // Auto-inject Provider keyword for OLEDB (MANDATORY requirement)
+      parts.push('Provider=MSOLEDBSQL');
+    }
+  }
+
   // For ODBC, add the Driver specification first if not already present
   if (driver === 'odbc') {
     const hasDriver = mapped.translatedKeywords.some(
@@ -61,7 +72,13 @@ function generateKeyValue(
 
   for (const kw of mapped.translatedKeywords) {
     const value = formatValue(kw.targetValue, driver);
-    parts.push(`${kw.targetKeyword}=${value}`);
+    // For OLEDB, ensure Provider keyword is always first
+    if (driver === 'oledb' && kw.targetKeyword.toLowerCase() === 'provider') {
+      // Insert Provider at the beginning
+      parts.unshift(`${kw.targetKeyword}=${value}`);
+    } else {
+      parts.push(`${kw.targetKeyword}=${value}`);
+    }
   }
 
   const separator = options?.formatting === 'readable' ? '; ' : ';';
