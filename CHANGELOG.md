@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.1] - 2026-02-04
 
+> 📖 [Full Release Notes](release-notes/v0.0.1.md)
+
 ### Added
 - Initial release of SQL Server Connection String Translator
 - Translate between 7 SQL Server driver formats:
