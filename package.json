@@ -2,7 +2,7 @@
   "name": "sql-connection-string-translator",
   "displayName": "SQL Connection String Translator",
   "description": "Translate SQL Server connection strings between 7 driver formats: SqlClient, ODBC, OLEDB, JDBC, PHP, Python, Rust",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "publisher": "sqlconnectionstrings",
   "icon": "media/icon.png",
   "galleryBanner": {
