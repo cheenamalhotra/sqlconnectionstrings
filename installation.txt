@@ -1,0 +1,47 @@
+SQL Connection String Translator - Installation Instructions
+============================================================
+
+Prerequisites
+-------------
+- Visual Studio Code 1.80 or higher
+
+Installation Steps
+------------------
+
+1. Download the extension file:
+   - Get "sqlconnectionstrings-1.0.0.vsix" from the shared location
+
+2. Install via VS Code:
+   - Open VS Code
+   - Press Cmd+Shift+P (macOS) or Ctrl+Shift+P (Windows/Linux)
+   - Type "Extensions: Install from VSIX..." and select it
+   - Browse to the downloaded .vsix file and select it
+   - Click "Install"
+
+   OR install via terminal:
+   
+   code --install-extension /path/to/sqlconnectionstrings-1.0.0.vsix
+
+3. Reload VS Code:
+   - Press Cmd+Shift+P → "Developer: Reload Window"
+
+Usage
+-----
+
+1. Translate a connection string:
+   - Press Cmd+Shift+P (macOS) or Ctrl+Shift+P (Windows/Linux)
+   - Type "SQL: Translate Connection String"
+   - Paste your connection string and select the target driver format
+
+2. Supported drivers:
+   - SqlClient (.NET)
+   - ODBC
+   - OLEDB
+   - JDBC
+   - PHP (PDO_SQLSRV)
+   - Python (pyodbc)
+   - Rust (tiberius)
+
+3. Interactive Translator UI:
+   - Press Cmd+Shift+P → "SQL: Open Connection String Translator"
+   - Paste your connection string and see translations to all formats at once

@@ -1,0 +1,129 @@
+{
+  "name": "sql-connection-string-translator",
+  "displayName": "SQL Connection String Translator",
+  "description": "Translate SQL Server connection strings between 7 driver formats: SqlClient, ODBC, OLEDB, JDBC, PHP, Python, Rust",
+  "version": "1.0.0",
+  "publisher": "sqlconnectionstrings",
+  "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#1e1e1e",
+    "theme": "dark"
+  },
+  "badges": [
+    {
+      "url": "https://img.shields.io/badge/SQL%20Server-Translator-blue",
+      "description": "SQL Server Connection String Translator",
+      "href": "https://github.com/your-repo/connection-string-translator"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-repo/connection-string-translator"
+  },
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onView:connectionStringTranslator.sidebarView",
+    "onCommand:connectionStringTranslator.translate",
+    "onCommand:connectionStringTranslator.translateSelection",
+    "onCommand:connectionStringTranslator.translateClipboard",
+    "onCommand:connectionStringTranslator.quickTranslate"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "connectionStringTranslator.translate",
+        "title": "Connection String: Open Translator",
+        "category": "Connection String"
+      },
+      {
+        "command": "connectionStringTranslator.translateSelection",
+        "title": "Connection String: Translate Selection",
+        "category": "Connection String"
+      },
+      {
+        "command": "connectionStringTranslator.translateClipboard",
+        "title": "Connection String: Translate from Clipboard",
+        "category": "Connection String"
+      },
+      {
+        "command": "connectionStringTranslator.quickTranslate",
+        "title": "Connection String: Quick Translate to...",
+        "category": "Connection String"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "connectionStringTranslator.translateSelection",
+          "when": "editorHasSelection",
+          "group": "1_modification"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "connectionStringTranslator.translate",
+        "key": "ctrl+shift+c ctrl+shift+t",
+        "mac": "cmd+shift+c cmd+shift+t",
+        "when": "editorTextFocus"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "connectionStringTranslator",
+          "title": "SQL Connection String Translator",
+          "icon": "media/sidebar-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "connectionStringTranslator": [
+        {
+          "type": "webview",
+          "id": "connectionStringTranslator.sidebarView",
+          "name": "Translator"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "webpack --mode production",
+    "watch": "webpack --mode development --watch",
+    "package": "npm run compile && vsce package --no-dependencies",
+    "test": "jest",
+    "test:unit": "jest --testPathPattern=test/unit",
+    "test:integration": "node ./out/test/runTest.js",
+    "lint": "eslint src --ext ts",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\""
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/jest": "^29.5.0",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.80.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vscode/test-electron": "^2.3.0",
+    "@vscode/vsce": "^3.7.1",
+    "eslint": "^8.50.0",
+    "glob": "^10.3.0",
+    "jest": "^29.7.0",
+    "mocha": "^10.2.0",
+    "prettier": "^3.0.0",
+    "ts-jest": "^29.1.0",
+    "ts-loader": "^9.5.0",
+    "typescript": "^5.3.0",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.0"
+  }
+}
