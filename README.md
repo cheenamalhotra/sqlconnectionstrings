@@ -50,6 +50,10 @@ code --install-extension sql-connection-string-translator-0.0.1.vsix
 
 ## Usage
 
+### Demo
+
+![Demo](media/demo.gif)
+
 ### Open Translator Panel
 
 1. Open Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`)
