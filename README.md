@@ -1,4 +1,4 @@
-# SQL Server Connection String Translator
+# [Experimental] SQL Server Connection String Translator
 
 A VS Code extension that translates SQL Server connection strings between 7 different driver formats with intelligent auto-detection.
 
